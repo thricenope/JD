@@ -1,5 +1,6 @@
 <template>
   <div class="toast">
+    这是一个
   </div>
 </template>
 
