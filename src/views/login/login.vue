@@ -19,17 +19,18 @@
     </div>
     <div class="wrapper__login-button" @click="handleLogin">登录</div>
     <div class="wrapper__login-link" @click="handleRegisterClick">立即注册</div>
+    <Toast />
   </div>
 </template>
 <script>
 import { useRouter } from 'vue-router'
 import { post } from '../../../src/utils/request'
 import { reactive } from 'vue'
-
-// axios.defaults.headers.post['Content-Type'] = 'application/json'
+import Toast from '../../components/toast'
 
 export default {
   name: 'Login',
+  components: { Toast },
   setup () {
     const data = reactive({
       username: '',
