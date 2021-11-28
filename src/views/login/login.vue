@@ -19,34 +19,39 @@
     </div>
     <div class="wrapper__login-button" @click="handleLogin">登录</div>
     <div class="wrapper__login-link" @click="handleRegisterClick">立即注册</div>
-    <Toast v-if="data.showToast" :message=data.toastMessage />
+    <Toast v-if="toastData.showToast" :message=toastData.toastMessage />
   </div>
 </template>
 <script>
 import { useRouter } from 'vue-router'
-import { post } from '../../../src/utils/request'
 import { reactive } from 'vue'
+import { post } from '../../../src/utils/request'
 import Toast from '../../components/toast'
+
+const useToastEffect = () => {
+  const toastData = reactive({
+    showToast: false,
+    toastMessage: ''
+  })
+  const showToast = (message) => {
+    toastData.showToast = true
+    toastData.toastMessage = message
+    setTimeout(() => {
+      toastData.showToast = false
+      toastData.toastMessage = ''
+    }, 2000)
+  }
+  return { toastData, showToast }
+}
 
 export default {
   name: 'Login',
   components: { Toast },
   setup () {
-    const data = reactive({
-      username: '',
-      password: '',
-      showToast: false,
-      toastMessage: ''
-    })
-    const showToast = (message) => {
-      data.showToast = true
-      data.toastMessage = message
-      setTimeout(() => {
-        data.showToast = false
-        data.toastMessage = ''
-      }, 2000)
-    }
     const router = useRouter()
+    const data = reactive({ username: '', password: '' })
+    const { toastData, showToast } = useToastEffect()
+
     const handleLogin = async () => {
       try {
         const result = await post('/api/user/login', {
@@ -70,7 +75,8 @@ export default {
     return {
       handleLogin,
       handleRegisterClick,
-      data
+      data,
+      toastData
     }
   }
 }
