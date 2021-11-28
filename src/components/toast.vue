@@ -1,9 +1,13 @@
 <template>
   <div class="toast">
-    这是一个
+    {{ message }}
   </div>
 </template>
-
+<script>
+export default {
+  props: ['message']
+}
+</script>
 <style lang="scss" scoped>
 .toast {
   position: fixed;

@@ -19,7 +19,7 @@
     </div>
     <div class="wrapper__login-button" @click="handleLogin">登录</div>
     <div class="wrapper__login-link" @click="handleRegisterClick">立即注册</div>
-    <Toast />
+    <Toast v-if="data.showToast" :message=data.toastMessage />
   </div>
 </template>
 <script>
@@ -34,8 +34,18 @@ export default {
   setup () {
     const data = reactive({
       username: '',
-      password: ''
+      password: '',
+      showToast: false,
+      toastMessage: ''
     })
+    const showToast = (message) => {
+      data.showToast = true
+      data.toastMessage = message
+      setTimeout(() => {
+        data.showToast = false
+        data.toastMessage = ''
+      }, 2000)
+    }
     const router = useRouter()
     const handleLogin = async () => {
       try {
@@ -48,10 +58,10 @@ export default {
           localStorage.isLogin = true
           await router.push({ name: 'Home' })
         } else {
-          alert('login fail')
+          showToast('登陆失败')
         }
       } catch (e) {
-        alert('send fail')
+        alert('请求失败')
       }
     }
     const handleRegisterClick = () => {
