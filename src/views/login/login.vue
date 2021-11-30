@@ -59,7 +59,7 @@ export default {
           username: data.username,
           password: data.password
         })
-        console.log(result)
+        // console.log(result)
         if (result?.errno === 0) {
           localStorage.isLogin = true
           await router.push({ name: 'Home' })
