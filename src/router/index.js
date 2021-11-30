@@ -30,10 +30,10 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
-// router.beforeEach((to, from, next) => {
-//   const { isLogin } = localStorage
-//   const { name } = to
-//   const isLoginOrRegister = (name === 'Login' || name === 'Register')
-//   isLogin || isLoginOrRegister ? next() : next({ name: 'Login' })
-// })
+router.beforeEach((to, from, next) => {
+  const { isLogin } = localStorage
+  const { name } = to
+  const isLoginOrRegister = (name === 'Login' || name === 'Register')
+  isLogin || isLoginOrRegister ? next() : next({ name: 'Login' })
+})
 export default router
