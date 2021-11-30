@@ -17,7 +17,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 // BEM 的CSS 命名： block__element--modifier
 @import "../../style/variables";
 
