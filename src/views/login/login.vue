@@ -8,14 +8,14 @@
       <input
         class="wrapper__input__content"
         placeholder="请输入用户名"
-        v-model="data.username">
+        v-model="username">
     </div>
     <div class="wrapper__input">
       <input
         class="wrapper__input__content"
         placeholder="请输入密码"
         type="password"
-        v-model="data.password">
+        v-model="password">
     </div>
     <div class="wrapper__login-button" @click="handleLogin">登录</div>
     <div class="wrapper__login-link" @click="handleRegisterClick">立即注册</div>
@@ -24,7 +24,7 @@
 </template>
 <script>
 import { useRouter } from 'vue-router'
-import { reactive } from 'vue'
+import { reactive, toRefs } from 'vue'
 import { post } from '../../../src/utils/request'
 import Toast from '../../components/toast'
 
@@ -50,6 +50,7 @@ export default {
   setup () {
     const router = useRouter()
     const data = reactive({ username: '', password: '' })
+    const { username, password } = toRefs(data)
     const { toastData, showToast } = useToastEffect()
 
     const handleLogin = async () => {
@@ -73,16 +74,17 @@ export default {
       router.push({ name: 'Register' })
     }
     return {
+      username,
+      password,
       handleLogin,
       handleRegisterClick,
-      data,
       toastData
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-@import "../../style/variable";
+@import "../../style/variables";
 
 .wrapper {
   position: absolute;

@@ -32,7 +32,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "../../style/variable";
+@import "../../style/variables";
 
 .wrapper {
   position: absolute;
