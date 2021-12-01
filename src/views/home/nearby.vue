@@ -1,11 +1,9 @@
 <template>
   <h3 class="nearby__title">附近店铺</h3>
   <div class="nearby">
-    <ShopInfo
-      v-for="item in nearbyList"
-      :key="item._id"
-      :item="item"
-    />
+    <router-link to="./shop" v-for="item in nearbyList" :key="item._id">
+      <ShopInfo :item="item"/>
+    </router-link>
   </div>
 </template>
 
@@ -46,5 +44,8 @@ export default {
     color: $content-fontcolor;
     font-weight: normal;
   }
+}
+a {
+  text-decoration: none;
 }
 </style>
