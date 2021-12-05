@@ -12,15 +12,17 @@
     </div>
     <ShopInfo :item="item" :hideBorder="true" v-show="item.imgUrl"/>
     <Content />
+    <Cart />
   </div>
 </template>
 
 <script>
 import ShopInfo from '../../components/shopinfo'
 import { reactive, toRefs } from 'vue'
-import { get } from '../../utils/request'
+import { get } from '@/utils/request'
 import { useRouter, useRoute } from 'vue-router'
 import Content from './content'
+import Cart from './cart'
 
 // 获取当前商铺信息
 const useShopInfoEffect = () => {
@@ -48,7 +50,7 @@ const useBackEffect = () => {
 }
 export default {
   name: 'Shop',
-  components: { ShopInfo, Content },
+  components: { ShopInfo, Content, Cart },
   // setup 里只放流程
   setup () {
     const { item, getItemData } = useShopInfoEffect()

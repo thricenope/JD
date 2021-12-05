@@ -24,38 +24,57 @@
           </p>
         </div>
         <div class="product__number">
-          <span class="product__number__minus">-</span>
-          0
-          <span class="product__number__plus">+</span>
+          <span
+            class="product__number__minus"
+            @click="() => { changeCartItemInfo( shopId, item._id, item, -1) }"
+          >-</span>
+          {{ cartList?.[shopId]?.[item._id]?.count || 0 }}
+          <span
+            class="product__number__plus"
+            @click="() => { changeCartItemInfo( shopId, item._id, item, 1) }"
+          >+</span>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-// import { reactive, toRefs } from 'vue'
 import { get } from '@/utils/request'
 import { reactive, toRefs } from 'vue'
+import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
+
+const categories = [{
+  name: '全部商品',
+  tab: 'all'
+}, {
+  name: '秒杀',
+  tab: 'seckill'
+}, {
+  name: '新鲜水果',
+  tab: 'fruit'
+}]
+// 购物车相关逻辑
+const useCartEffect = () => {
+  const store = useStore()
+  const { cartList } = toRefs(store.state)
+  const changeCartItemInfo = (shopId, productId, productInfo, num) => {
+    store.commit('changeCartItemInfo', { shopId, productId, productInfo, num })
+  }
+  return { cartList, changeCartItemInfo }
+}
 
 export default {
   name: 'Content',
   setup () {
-    const categories = [{
-      name: '全部商品',
-      tab: 'all'
-    }, {
-      name: '秒杀',
-      tab: 'seckill'
-    }, {
-      name: '新鲜水果',
-      tab: 'fruit'
-    }]
     const data = reactive({
-      currentTab: [],
+      currentTab: categories[0].tab,
       contentList: []
     })
+    const route = useRoute()
+    const shopId = route.params.id
     const getContentData = async (tab) => {
-      const result = await get('api/shop/1/products', { tab })
+      const result = await get(`api/shop/${route.params.id}/products`, { tab })
       if (result?.errno === 0 && result?.data?.length) {
         data.contentList = result.data
       }
@@ -64,9 +83,9 @@ export default {
       getContentData(tab)
       data.currentTab = tab
     }
-    // getContentData('all')
+    const { cartList, changeCartItemInfo } = useCartEffect()
     const { contentList, currentTab } = toRefs(data)
-    return { contentList, currentTab, categories, handleCategoryCLick }
+    return { contentList, currentTab, categories, shopId, handleCategoryCLick, cartList, changeCartItemInfo }
   }
 }
 </script>
