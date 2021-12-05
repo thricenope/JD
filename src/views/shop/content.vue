@@ -42,7 +42,7 @@
 import { get } from '@/utils/request'
 import { reactive, toRefs } from 'vue'
 import { useRoute } from 'vue-router'
-import { useStore } from 'vuex'
+import { useCommonCartEffect } from '@/views/shop/commonCartEffect'
 
 const categories = [{
   name: '全部商品',
@@ -54,15 +54,6 @@ const categories = [{
   name: '新鲜水果',
   tab: 'fruit'
 }]
-// 购物车相关逻辑
-const useCartEffect = () => {
-  const store = useStore()
-  const { cartList } = toRefs(store.state)
-  const changeCartItemInfo = (shopId, productId, productInfo, num) => {
-    store.commit('changeCartItemInfo', { shopId, productId, productInfo, num })
-  }
-  return { cartList, changeCartItemInfo }
-}
 
 export default {
   name: 'Content',
@@ -83,7 +74,7 @@ export default {
       getContentData(tab)
       data.currentTab = tab
     }
-    const { cartList, changeCartItemInfo } = useCartEffect()
+    const { cartList, changeCartItemInfo } = useCommonCartEffect()
     const { contentList, currentTab } = toRefs(data)
     return { contentList, currentTab, categories, shopId, handleCategoryCLick, cartList, changeCartItemInfo }
   }

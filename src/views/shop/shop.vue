@@ -46,7 +46,7 @@ const useBackEffect = () => {
   const handleBackClick = () => {
     router.back()
   }
-  return { handleBackClick }
+  return handleBackClick
 }
 export default {
   name: 'Shop',
