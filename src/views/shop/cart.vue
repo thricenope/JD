@@ -2,7 +2,14 @@
   <div class="cart">
     <div class="product">
       <div class="product__header">
-        全选
+        <div class="product__header__all">
+          <span
+            class="product__header__icon iconfont"
+            v-html="allChecked ? '&#xe70f;': '&#xe66c;'"
+            @click="() => setCartItemChecked(shopId)"
+          />
+          全选</div>
+        <div class="product__header__clear" @click="() => cleanCartProducts(shopId)">清空购物车</div>
       </div>
       <template v-for="item in productList" :key="item._id">
         <div class="product__item" v-if="item.count > 0 ">
@@ -28,7 +35,7 @@
               class="product__number__minus"
               @click="() => { changeCartItemInfo( shopId, item._id, item, -1) }"
             >-</span>
-            {{ item.count || 0 }}
+            {{ cartList[shopId]?.[item._id]?.count || 0 }}
             <span
               class="product__number__plus"
               @click="() => { changeCartItemInfo( shopId, item._id, item, 1) }"
@@ -102,7 +109,41 @@ const useCartEffect = () => {
     store.commit('changeCartChecked', { shopId, productId })
     return { changeCartChecked }
   }
-  return { total, price, productList, changeCartItemInfo, changeCartChecked }
+
+  const cleanCartProducts = (shopId) => {
+    store.commit('cleanCartProducts', { shopId })
+    return { cleanCartProducts }
+  }
+
+  const setCartItemChecked = (shopId) => {
+    store.commit('setCartItemChecked', { shopId })
+    return { setCartItemChecked }
+  }
+
+  const allChecked = computed(() => {
+    const productList = cartList[shopId]
+    let result = true
+    if (productList) {
+      for (const i in productList) {
+        const product = productList[i]
+        if (product.count > 0 && !product.check) {
+          result = false
+        }
+      }
+    }
+    return result
+  })
+  return {
+    total,
+    price,
+    productList,
+    changeCartItemInfo,
+    changeCartChecked,
+    cleanCartProducts,
+    cartList,
+    allChecked,
+    setCartItemChecked
+  }
 }
 
 export default {
@@ -110,8 +151,29 @@ export default {
   setup () {
     const route = useRoute()
     const shopId = route.params.id
-    const { total, price, productList, changeCartItemInfo, changeCartChecked } = useCartEffect()
-    return { shopId, total, price, productList, changeCartItemInfo, changeCartChecked }
+    const {
+      total,
+      price,
+      productList,
+      changeCartItemInfo,
+      changeCartChecked,
+      cartList,
+      allChecked,
+      cleanCartProducts,
+      setCartItemChecked
+    } = useCartEffect()
+    return {
+      shopId,
+      total,
+      price,
+      productList,
+      changeCartItemInfo,
+      changeCartChecked,
+      cartList,
+      allChecked,
+      cleanCartProducts,
+      setCartItemChecked
+    }
   }
 }
 </script>
@@ -132,8 +194,25 @@ export default {
   flex: 1;
   background-color: #FFF;
   &__header {
-    height: .52rem;
+    display: flex;
+    line-height: .52rem;
     border-bottom:1px solid #F1F1F1;
+    color: #333333;
+    font-size: .14rem;
+
+    &__all {
+      margin-left: .18rem;
+      font-size: .14rem;
+    }
+    &__icon {
+      font-size: .2rem;
+      color: #0091FF;
+    }
+    &__clear {
+      flex: 1;
+      text-align: right;
+      margin-right: .16rem;
+    }
   }
   &__item {
     position: relative;
